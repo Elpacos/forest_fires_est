@@ -7,7 +7,9 @@ F2 = days,
 X1 = relative humidity,
 X2 = wind,
 X3 = temperature,
-X4 = rain
+X4 = rain,
+X5 = x-axis spatial coordinate within the Montesinho park map
+X6 = y-axis spatial coordinate within the Montesinho park map
 '''
 import sklearn
 import pandas as pd
@@ -104,26 +106,52 @@ data = {
         "Skewness": 0.0,
         "Kurtosis": 0.0
     },
+    "X5": {
+        "Values": list(df["X"]),
+        "Variance": 0.0,
+        "Median": 0.0,
+        "Average": 0.0,
+        "Min": 0.0,
+        "Max": 0.0,
+        "Range": 0.0,
+        "IQR": 0.0,
+        "Standard Deviation": 0.0,
+        "Skewness": 0.0,
+        "Kurtosis": 0.0
+    },
+    "X6": {
+        "Values": list(df["Y"]),
+        "Variance": 0.0,
+        "Median": 0.0,
+        "Average": 0.0,
+        "Min": 0.0,
+        "Max": 0.0,
+        "Range": 0.0,
+        "IQR": 0.0,
+        "Standard Deviation": 0.0,
+        "Skewness": 0.0,
+        "Kurtosis": 0.0
+    },
 }
 #Assign the values we loaded from file to the data dictionary
 for key in data:
     #Access the value only once to store computing time
     if key is "X1" or key is "X2" or key is "X3" or key is "X4":
-        data[key]["Values"] = np.sort(data[key]["Values"])
-    data[key]["Average"] = np.average(data[key]["Values"])
-    data[key]["Min"] = np.amin(data[key]["Values"])
-    data[key]["Max"] = np.amax(data[key]["Values"])
-    data[key]["Range"] = data[key]["Max"] - data[key]["Min"]
-    data[key]["Median"] = np.median(data[key]["Values"])
-    data[key]["IQR"] = iqr(data[key]["Values"])
-    data[key]["Variance"] = np.var(data[key]["Values"])
-    data[key]["Standard Deviation"] = np.std(data[key]["Values"])
-    data[key]["Skewness"] = skew(data[key]["Values"])
-    data[key]["Kurtosis"] = kurtosis(data[key]["Values"])
+        data[key]["Values"] = data[key]["Values"]
+        data[key]["Average"] = np.average(data[key]["Values"])
+        data[key]["Min"] = np.amin(data[key]["Values"])
+        data[key]["Max"] = np.amax(data[key]["Values"])
+        data[key]["Range"] = data[key]["Max"] - data[key]["Min"]
+        data[key]["Median"] = np.median(data[key]["Values"])
+        data[key]["IQR"] = iqr(data[key]["Values"])
+        data[key]["Variance"] = np.var(data[key]["Values"])
+        data[key]["Standard Deviation"] = np.std(data[key]["Values"])
+        data[key]["Skewness"] = skew(data[key]["Values"])
+        data[key]["Kurtosis"] = kurtosis(data[key]["Values"])
     #print(data[key])
 
 #Sort the arrays of days and months
-freq_tablef2 = itemfreq(le.inverse_transform(data["F2"]["Values"]))
+'''freq_tablef2 = itemfreq(le.inverse_transform(data["F2"]["Values"]))
 daysweekf2 = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 sorted_daysf2 = sorted(freq_tablef2, key=lambda x: daysweekf2.index(x[0]))
 dayArray = np.array(sorted_daysf2)
@@ -131,7 +159,7 @@ dayArray = np.array(sorted_daysf2)
 freq_tablef1 = itemfreq(le2.inverse_transform(data["F1"]["Values"]))
 monthsf1 = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep","oct","nov","dec"]
 sorted_monthsf1 = sorted(freq_tablef1, key=lambda x: monthsf1.index(x[0]))
-monthArray = np.array(sorted_monthsf1)
+monthArray = np.array(sorted_monthsf1)'''
 
 ###Part 1###
 #Building a frequency table with variable F2
@@ -203,13 +231,13 @@ plt.show()"""
 """ plt.hist(data["X2"]["Values"], bins=21, align='mid' )
 plt.ylabel("Number of occurrences",fontsize=18, rotation=90)
 plt.xlabel("Wind speed in km/h:")
-plt.show() """
-"""sns.set(rc={'figure.figsize':(10, 9)})
+plt.show()
+sns.set(rc={'figure.figsize':(10, 9)})
 sns.set_context('talk')
 probplot(data["X2"]["Values"], dist="norm", fit=True, rvalue=True, plot=plt)
-plt.xlabel("Theoretical quantiles\nMy interpretation: standard deviations", labelpad=12)
+plt.xlabel("Theoretical quantiles\nInterpretation: standard deviations", labelpad=12)
 plt.ylabel("Wind speed in km/h")
-plt.title("Probability Plot to Compare normal_distr_values to Perfectly Normal Distribution", y=1.015)
+plt.title("X2 variable", y=1.015)
 plt.show()"""
 
 ###Part 8###
@@ -219,7 +247,7 @@ plt.ylabel("Number of occurrences",fontsize=18, rotation=90)
 plt.xlabel("Temperature")
 plt.show()"""
 
-month_temp = np.array([["jan",[] ],["feb",[] ],["mar",[] ],["apr", []],["may", []],["jun", []],["jul", []],["aug", []],["sep", []],["oct", []],["nov",[] ],["dec",[] ]])
+"""month_temp = np.array([["jan",[] ],["feb",[] ],["mar",[] ],["apr", []],["may", []],["jun", []],["jul", []],["aug", []],["sep", []],["oct", []],["nov",[] ],["dec",[] ]])
 for j, i in df.iterrows():
     if i["month"] == "jan":
         month_temp[0][1].append(i["temp"])
@@ -261,4 +289,93 @@ octo = plt.boxplot(month_temp[9][1], positions= [9])
 nov = plt.boxplot(month_temp[10][1], positions= [10])
 dec = plt.boxplot(month_temp[11][1], positions= [11])
 plt.xticks(range(0, len(monthsf2)), monthsf2)
+plt.show()"""
+
+
+###Part 9###
+#Build a histogram, boxplot and probabilistic paper and choose the best one
+"""
+plt.hist(data["X4"]["Values"], bins=21, align='mid' )
+plt.ylabel("Number of occurrences",fontsize=18, rotation=90)
+plt.xlabel("Rain in mm/m2")
 plt.show()
+
+fig6, ax6 = plt.subplots()
+ax6.set_title('X4 variable')
+ax6.boxplot(data['X4']['Values'], vert=False)
+plt.show()
+
+sns.set(rc={'figure.figsize':(10, 9)})
+sns.set_context('talk')
+probplot(data["X4"]["Values"], dist="norm", fit=True, rvalue=True, plot=plt)
+plt.xlabel("Theoretical quantiles\nInterpretation: standard deviations", labelpad=12)
+plt.ylabel("Rain in mm/m2")
+plt.title("X4 variable", y=1.015)
+plt.show()"""
+
+###Part 10###
+#Multiply half of the values of X1 by 2 and plot a histogram
+"""shuffled = data["X1"]["Values"]
+np.random.shuffle(shuffled)
+for i in range(int(len(shuffled)/2)):
+    shuffled[i] = shuffled[i] * 2
+plt.hist(shuffled, bins=21, align='mid' )
+plt.ylabel("Number of occurrences",fontsize=18, rotation=90)
+plt.xlabel("Relative humidity multiplied by 2", fontsize=18)
+plt.show()"""
+
+###Part 11###
+#Work with the discrete variables (X5 & X6)
+'''print("X5", data["X5"]["Skewness"],data["X5"]["Kurtosis"])
+print("X6", data["X6"]["Skewness"],data["X6"]["Kurtosis"])
+plt.hist(data["X5"]["Values"], bins=21, align='mid' )
+plt.ylabel("Number of occurrences",fontsize=18, rotation=90)
+plt.xlabel("X5", fontsize=18)
+plt.show()
+
+plt.hist(data["X6"]["Values"], bins=21, align='mid' )
+plt.ylabel("Number of occurrences",fontsize=18, rotation=90)
+plt.xlabel("X6", fontsize=18)
+plt.show()'''
+
+###Part 12###
+#Work with the continous variables (X1, X2, X3, X4)
+
+#print(data["X1"], "\n", data["X2"], "\n", data["X3"], "\n" ,data["X4"], "\n")
+
+### Part 13 ###
+# Log() the continue variables X1, X2, X3, X4
+
+"""X1log = np.array(data["X1"]["Values"])
+X1log = np.log(X1log)
+
+plt.hist(X1log, bins=21, align='mid' )
+plt.ylabel("Number of occurrences",fontsize=18, rotation=90)
+plt.xlabel("X1log", fontsize=18)
+plt.show()
+
+X2log = np.array(data["X2"]["Values"])
+X2log = np.log(X2log)
+plt.hist(X2log, bins=21, align='mid' )
+plt.ylabel("Number of occurrences",fontsize=18, rotation=90)
+plt.xlabel("X2log", fontsize=18)
+plt.show()
+
+X3log = np.array(data["X3"]["Values"])
+X3log = np.log(X3log)
+
+plt.hist(X3log, bins=21, align='mid' )
+plt.ylabel("Number of occurrences",fontsize=18, rotation=90)
+plt.xlabel("X3log", fontsize=18)
+plt.show()"""
+
+
+### Part 15 ###
+#We sum variables of two normal distributions per pairs X1 and X2
+# normalsum = np.add(data["X1"]["Values"], data["X2"]["Values"])
+# plt.hist(normalsum, bins=21, align='mid' )
+# plt.ylabel("Number of occurrences",fontsize=18, rotation=90)
+# plt.xlabel("X3log", fontsize=18)
+# plt.show()
+
+print(data["X1"]["Standard Deviation"] * data["X1"]["Standard Deviation"] + data["X2"]["Standard Deviation"] * data["X2"]["Standard Deviation"] )
