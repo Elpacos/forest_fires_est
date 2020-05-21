@@ -1,4 +1,4 @@
-#Statistics project from Victor Carralero & Manuel Eljishi
+#Statistics project from Victor Martínez & Manuel Eljishi
 #UPV Computer Engineering Degree 2020
 
 '''
@@ -11,6 +11,8 @@ X4 = rain,
 X5 = x-axis spatial coordinate within the Montesinho park map
 X6 = y-axis spatial coordinate within the Montesinho park map
 '''
+import scipy.stats as st
+import random
 import sklearn
 import pandas as pd
 import numpy as np
@@ -378,4 +380,20 @@ plt.show()"""
 # plt.xlabel("X3log", fontsize=18)
 # plt.show()
 
-print(data["X1"]["Standard Deviation"] * data["X1"]["Standard Deviation"] + data["X2"]["Standard Deviation"] * data["X2"]["Standard Deviation"] )
+""" print(data["X1"]["Standard Deviation"] * data["X1"]["Standard Deviation"] + data["X2"]["Standard Deviation"] * data["X2"]["Standard Deviation"] ) """
+
+
+### Part 16 ###
+#Get a 5 random value sample of the X1 poblation
+
+random_array = []
+
+for i in range(5):
+    aux = random.randint(0, (len(data["X1"]["Values"])))
+    random_array.append(data["X1"]["Values"][aux])
+
+a = np.array(random_array)
+mean_random = np.mean(a)
+interval = st.t.interval(0.95, len(a)-1, loc=mean_random, scale=st.sem(a))
+print(interval)
+print(mean_random)
